@@ -1,27 +1,77 @@
-import pandas as pd 
-#pd.set_option('display.width', None) 
- 
-df = pd.read_csv('ncr_ride_bookings.csv') 
- 
-print (df.head()) 
- 
-print(df.info()) 
- 
-print(df.describe()) 
- 
-print(f"Количество строк и столбцов: {df.shape}") 
- 
-df['booking_datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time']) 
-selected_columns = df[['Booking ID', 'booking_datetime', 'Booking Status', 'Vehicle Type', 'Payment Method']] 
-print(selected_columns.head()) 
- 
-cancelled_by_driver = df[df['Booking Status'] == 'Cancelled by Dr№iver'] 
-print(cancelled_by_driver) 
- 
-auto_high_value = df[(df['Vehicle Type'] == 'Auto') & (df['Booking Value'] > 500)] 
-print(auto_high_value) 
- 
-start_date = '2024-03-01' 
-end_date = '2024-03-31' 
-march_2024_bookings = df[(df['booking_datetime'] >= start_date) & (df['booking_datetime'] <= end_date)] 
+### **Анализ данных о поездках Uber**
+Инициализация рабочей среды
+
+`import pandas as pd`
+
+### **Этап 1. Загрузка и первичное исследование данных**
+Загружаем исходные данные из CSV-файла в основной DataFrame:
+
+`df = pd.read_csv('ncr_ride_bookings.csv')`
+
+Просматриваем структуру данных - выводим начальные записи:
+
+`print(df.head())`
+
+<img width="666" height="231" alt="Image" src="https://github.com/user-attachments/assets/e0da6eed-ccb8-48bc-85e1-a2df1edb3fa3" />
+
+Анализируем метаинформацию о датасете - типы данных, пропуски и общую структуру:
+
+`print(df.info())`
+
+<img width="770" height="799" alt="Image" src="https://github.com/user-attachments/assets/8925966a-4214-4836-8e0b-675e64e41d22" />
+
+Изучаем статистические характеристики числовых полей:
+
+`print(df.describe())`
+
+<img width="800" height="313" alt="Image" src="https://github.com/user-attachments/assets/43921f00-2e9b-4e13-b89e-4d7eccb5f1d6" />
+
+Определяем объем данных:
+
+`print(f"Размерность таблицы: {df.shape}")`
+
+<img width="988" height="101" alt="Image" src="https://github.com/user-attachments/assets/968c6492-9e4b-487d-ae6b-2d69a59f65c4" />
+
+### **Этап 2. Отбор и фильтрация данных**
+
+Создаем производный столбец с полной датой и временем бронирования:
+
+`df['booking_datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])`
+
+Формируем поднабор данных с ключевыми атрибутами:
+
+```
+selected_columns = df[['Booking ID', 'booking_datetime', 'Booking Status', 'Vehicle Type', 'Payment Method']]
+print(selected_columns.head())
+```
+
+<img width="763" height="223" alt="Image" src="https://github.com/user-attachments/assets/576f41cf-71a1-401a-a32d-df731dfe0583" />
+
+Выделяем записи с определенным статусом отмены:
+
+```
+cancelled_by_driver = df[df['Booking Status'] == 'Cancelled by Driver']
+print(cancelled_by_driver)
+```
+
+<img width="696" height="391" alt="Image" src="https://github.com/user-attachments/assets/c0158b05-b46b-45c9-94a4-5378d934f8e9" />
+
+Применяем комбинированную фильтрацию по типу транспорта и стоимости:
+
+```
+auto_high_value = df[(df['Vehicle Type'] == 'Auto') & (df['Booking Value'] > 500)]
+print(auto_high_value)
+```
+
+<img width="714" height="406" alt="Image" src="https://github.com/user-attachments/assets/4dfbae18-ff91-43d3-8f89-37e95db2171a" />
+
+Выбираем бронирования за конкретный временной период:
+
+```
+start_date = '2024-03-01'
+end_date = '2024-03-31'
+march_2024_bookings = df[(df['booking_datetime'] >= start_date) & (df['booking_datetime'] <= end_date)]
 print(march_2024_bookings)
+```
+
+<img width="728" height="399" alt="Image" src="https://github.com/user-attachments/assets/79aa89b9-8023-4e51-b76b-1dac255f9945" />
